@@ -35,7 +35,7 @@ export default class RestaurantList extends Vue {
   private restaurants!: Restaurant[];
 
   @restaurantsModule.State(CONSTANTS.LOADING)
-  private isLoading: boolean;
+  private isLoading!: boolean;
 
   mounted(): void {
     this.loadRestaurants();
