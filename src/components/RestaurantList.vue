@@ -23,7 +23,7 @@ export default class RestaurantList extends Vue {
   loadRestaurants!: () => {data: Restaurant[]; status: number};
 
   @restaurantsModule.State('records')
-  restaurants: Restaurant[];
+  restaurants!: Restaurant[];
 
   mounted(): void {
     this.loadRestaurants();
