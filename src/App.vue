@@ -1,12 +1,16 @@
 <template>
-  <div id="app">Hello World</div>
+  <div>
+    <div id="app">Hello World</div>
+    <RestaurantScreen />
+  </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import RestaurantScreen from '@/components/RestaurantScreen.vue';
 
 @Component({
-  components: {},
+  components: {RestaurantScreen},
 })
 export default class App extends Vue {}
 </script>
