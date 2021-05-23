@@ -40,7 +40,6 @@ describe('RestaurantList', () => {
         restaurants: restaurantsModule,
       },
     });
-    // @ts-ignore
     wrapper = mount(RestaurantList, {localVue, store, vuetify});
   });
 
