@@ -1,5 +1,8 @@
 <template>
   <ul>
+    <v-list-item tag="li">
+      <span v-if="isLoading" data-testid="loading-indicator"> Loading... </span>
+    </v-list-item>
     <v-list-item
       tag="li"
       data-testid="restaurant"
@@ -19,16 +22,20 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {Restaurant} from '@/types/Restaurant';
+import {CONSTANTS} from '@/store/restaurants';
 
 const restaurantsModule = namespace('restaurants');
 
 @Component
 export default class RestaurantList extends Vue {
-  @restaurantsModule.Action('load')
-  loadRestaurants!: () => {data: Restaurant[]; status: number};
+  @restaurantsModule.Action(CONSTANTS.LOAD)
+  private loadRestaurants!: () => {data: Restaurant[]; status: number};
 
-  @restaurantsModule.State('records')
-  restaurants!: Restaurant[];
+  @restaurantsModule.State(CONSTANTS.RECORDS)
+  private restaurants!: Restaurant[];
+
+  @restaurantsModule.State(CONSTANTS.LOADING)
+  private isLoading!: boolean;
 
   mounted(): void {
     this.loadRestaurants();

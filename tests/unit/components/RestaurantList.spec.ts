@@ -4,7 +4,7 @@ import Vuex, {Module} from 'vuex';
 import {createLocalVue, mount, Wrapper} from '@vue/test-utils';
 import RestaurantList from '@/components/RestaurantList.vue';
 import {RootState} from '@/store';
-import {RestaurantState} from '@/store/restaurants';
+import {CONSTANTS, RestaurantState} from '@/store/restaurants';
 
 const findByTestId = (
   wrapper: Wrapper<RestaurantList>,
@@ -27,12 +27,17 @@ describe('RestaurantList', () => {
   let restaurantsModule: Module<RestaurantState, RootState>;
   let wrapper: Wrapper<RestaurantList>;
 
-  beforeEach(() => {
+  const mountWithStore = (
+    state: RestaurantState = {
+      [CONSTANTS.RECORDS]: records,
+      [CONSTANTS.LOADING]: false,
+    },
+  ) => {
     restaurantsModule = {
       namespaced: true,
-      state: {records},
+      state,
       actions: {
-        load: jest.fn().mockName('load'),
+        [CONSTANTS.LOAD]: jest.fn().mockName(CONSTANTS.LOAD),
       },
     };
     const store = new Vuex.Store({
@@ -40,17 +45,38 @@ describe('RestaurantList', () => {
         restaurants: restaurantsModule,
       },
     });
-    wrapper = mount(RestaurantList, {localVue, store, vuetify});
-  });
+    wrapper = mount(RestaurantList, {
+      localVue,
+      store,
+      vuetify,
+      directives: {intersect: {}},
+    });
+  };
 
   it('loads restaurants on mount', () => {
-    expect(restaurantsModule?.actions?.load).toHaveBeenCalled();
+    mountWithStore();
+    expect(restaurantsModule?.actions?.[CONSTANTS.LOAD]).toHaveBeenCalled();
   });
 
   it('displays the restaurants', () => {
+    mountWithStore();
     const firstRestaurantName = findByTestId(wrapper, 'restaurant', 0).text();
     const secondRestaurantName = findByTestId(wrapper, 'restaurant', 1).text();
     expect(firstRestaurantName).toBe(records[0].name);
     expect(secondRestaurantName).toBe('Pizza Place');
+  });
+
+  it('displays the loading indicator while loading', () => {
+    mountWithStore({[CONSTANTS.RECORDS]: [], [CONSTANTS.LOADING]: true});
+    expect(wrapper.find('[data-testid="loading-indicator"]').exists()).toBe(
+      true,
+    );
+  });
+
+  it('does not display the loading indicator while not loading', () => {
+    mountWithStore({[CONSTANTS.RECORDS]: [], [CONSTANTS.LOADING]: false});
+    expect(wrapper.find('[data-testid="loading-indicator"]').exists()).toBe(
+      false,
+    );
   });
 });
