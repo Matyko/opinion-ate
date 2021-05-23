@@ -1,12 +1,17 @@
 <template>
   <ul>
-    <li
+    <v-list-item
+      tag="li"
       data-testid="restaurant"
       v-for="restaurant in restaurants"
       :key="restaurant.id"
     >
-      {{ restaurant.name }}
-    </li>
+      <v-list-item-content>
+        <v-list-item-title>
+          {{ restaurant.name }}
+        </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
   </ul>
 </template>
 
