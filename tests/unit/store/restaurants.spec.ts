@@ -1,8 +1,11 @@
 import Vuex from 'vuex';
 import {createLocalVue} from '@vue/test-utils';
 import restaurants from '@/store/restaurants';
+import Vue from 'vue';
+import Vuetify from 'vuetify';
 
 describe('restaurants', () => {
+  Vue.use(Vuetify);
   const localVue = createLocalVue();
   localVue.use(Vuex);
 
